@@ -13,7 +13,7 @@ import { User } from './entities/user.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: process.env.DATABASE_PATH || './database.sqlite',
+      database: process.env.DATABASE_PATH || './chatroom-john.sqlite',
       entities: [Room, Message, User],
       synchronize: true, // Auto-create tables (disable in production)
       logging: false,
