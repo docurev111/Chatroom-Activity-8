@@ -1,4 +1,4 @@
-﻿# Chatroom Application
+# Chatroom Application
 
 A real-time chat application built with React and NestJS, featuring WebSocket communication, MongoDB persistence, and a WhatsApp-inspired interface with animated 3D backgrounds.
 
@@ -32,10 +32,10 @@ Before running this application, ensure you have the following installed:
 
 ### 1. Clone the Repository
 
-`ash
+```bash
 git clone https://github.com/docurev111/Chatroom-Activity-8.git
 cd Chatroom-Activity-8
-`
+```
 
 ### 2. Install MongoDB
 
@@ -54,23 +54,23 @@ Verify MongoDB is running by executing `mongosh` in your terminal.
 
 ### 3. Backend Setup
 
-`ash
+```bash
 cd backend
 npm install
-`
+```
 
 Create a `.env` file (optional, defaults will be used if not created):
 
-`
+```
 PORT=3000
 MONGODB_URI=mongodb://localhost:27017/chatroom-john
-`
+```
 
 Start the backend server:
 
-`ash
+```bash
 npm run start:dev
-`
+```
 
 The backend will run on `http://localhost:3000`. API documentation is available at `http://localhost:3000/api/docs`.
 
@@ -78,11 +78,11 @@ The backend will run on `http://localhost:3000`. API documentation is available 
 
 Open a new terminal window:
 
-`ash
+```bash
 cd frontend
 npm install
 npm run dev
-`
+```
 
 The frontend will run on `http://localhost:5173`.
 
@@ -108,25 +108,25 @@ The frontend will run on `http://localhost:5173`.
 
 ## Project Structure
 
-`
+```
 chatroom-activity-8/
- backend/
-    src/
-       chat/          # WebSocket gateway for real-time events
-       rooms/         # Room management endpoints
-       messages/      # Message handling endpoints
-       schemas/       # Mongoose database schemas
-       main.ts        # Application entry point
-    .env.example
-    package.json
- frontend/
-    src/
-       components/    # React UI components
-       services/      # API and Socket.IO services
-       App.jsx        # Main application component
-    package.json
- README.md
-`
+├── backend/
+│   ├── src/
+│   │   ├── chat/          # WebSocket gateway for real-time events
+│   │   ├── rooms/         # Room management endpoints
+│   │   ├── messages/      # Message handling endpoints
+│   │   ├── schemas/       # Mongoose database schemas
+│   │   └── main.ts        # Application entry point
+│   ├── .env.example
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── components/    # React UI components
+│   │   ├── services/      # API and Socket.IO services
+│   │   └── App.jsx        # Main application component
+│   └── package.json
+└── README.md
+```
 
 ## API Endpoints
 
