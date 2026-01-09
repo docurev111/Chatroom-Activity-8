@@ -13,23 +13,26 @@ export class RoomsController {
   @ApiOperation({ summary: 'Create a new room' })
   @ApiResponse({ status: 201, description: 'Room created successfully' })
   @ApiResponse({ status: 409, description: 'Room already exists' })
-  create(@Body() createRoomDto: CreateRoomDto): Promise<Room> {
-    return this.roomsService.create(createRoomDto);
+  async create(@Body() createRoomDto: CreateRoomDto) {
+    const room = await this.roomsService.create(createRoomDto);
+    return this.transformRoom(room);
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all rooms' })
   @ApiResponse({ status: 200, description: 'Return all rooms' })
-  findAll(): Promise<Room[]> {
-    return this.roomsService.findAll();
+  async findAll() {
+    const rooms = await this.roomsService.findAll();
+    return rooms.map(room => this.transformRoom(room));
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a room by id' })
   @ApiResponse({ status: 200, description: 'Return the room' })
   @ApiResponse({ status: 404, description: 'Room not found' })
-  findOne(@Param('id') id: string): Promise<Room> {
-    return this.roomsService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const room = await this.roomsService.findOne(id);
+    return this.transformRoom(room);
   }
 
   @Delete(':id')
@@ -38,5 +41,15 @@ export class RoomsController {
   @ApiResponse({ status: 404, description: 'Room not found' })
   remove(@Param('id') id: string): Promise<void> {
     return this.roomsService.remove(id);
+  }
+
+  private transformRoom(room: any) {
+    return {
+      id: room._id.toString(),
+      name: room.name,
+      description: room.description,
+      createdAt: room.createdAt,
+      updatedAt: room.updatedAt,
+    };
   }
 }
