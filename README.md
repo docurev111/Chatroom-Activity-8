@@ -4,14 +4,32 @@ A modern, real-time chat application built with React and NestJS, featuring a cl
 
 ##  Features
 
-- **Real-time Messaging** - Instant message delivery using Socket.IO
+- **Real-time Messaging** - Insta### Backend won't start
+- Make sure port 3000 is not in use by another application
+- **Verify MongoDB is running**: Run \mongosh\ to test connection
+- Check that all dependencies are installed: \
+pm install\
+- Verify Node.js version is 16 or higher: \
+ode --version\
+
+### Frontend won't connect
+- Ensure the backend is running first
+- Check that backend is accessible at \http://localhost:3000\
+- Clear browser cache and refresh
+
+### MongoDB Connection Issues
+- **Windows**: Check MongoDB service is running in Services
+- **macOS/Linux**: Run \brew services list\ or \sudo systemctl status mongod\
+- Test connection manually: \mongosh mongodb://localhost:27017\
+- Make sure MongoDB is installed and port 27017 is not blocked
+- For a fresh start, you can drop the database: \mongosh\ then \use chatroom-john\ then \db.dropDatabase()\very using Socket.IO
 - **Multiple Chat Rooms** - Create and join different conversation spaces
 - **User Authentication** - Username-based login with persistent sessions
 - **Typing Indicators** - See when others are typing
 - **Profile Avatars** - Unique emoji avatars for each user
 - **Animated Background** - Interactive 3D ring effects using Vanta.js
 - **Responsive Design** - Clean, modern UI inspired by popular messaging apps
-- **Message History** - Persistent message storage with SQLite
+- **Message History** - Persistent message storage with MongoDB
 - **REST API Documentation** - Auto-generated Swagger docs
 
 ##  Tech Stack
@@ -28,8 +46,8 @@ A modern, real-time chat application built with React and NestJS, featuring a cl
 - **NestJS** - Progressive Node.js framework
 - **TypeScript** - Type-safe development
 - **Socket.IO** - WebSocket server for real-time features
-- **TypeORM** - Database ORM
-- **SQLite** - Lightweight database
+- **Mongoose** - MongoDB ODM (Object Data Modeling)
+- **MongoDB** - NoSQL document database
 - **Swagger** - Automatic API documentation
 
 ##  Installation
@@ -37,6 +55,7 @@ A modern, real-time chat application built with React and NestJS, featuring a cl
 ### Prerequisites
 - Node.js (v16 or higher)
 - npm or yarn
+- **MongoDB** (v4.4 or higher) - Must be installed and running locally
 
 ### Clone the Repository
 
@@ -64,7 +83,7 @@ copy .env.example .env
 
 # Or create manually with these settings:
 # PORT=3000
-# DATABASE_PATH=./chatroom-john.sqlite
+# MONGODB_URI=mongodb://localhost:27017/chatroom-john
 \\\
 
 4. Start the development server:
@@ -74,7 +93,9 @@ npm run start:dev
 
 The backend will start on \http://localhost:3000\
 
-**Note:** The database file \chatroom-john.sqlite\ will be automatically created in the backend folder on first run.
+**Note:** The MongoDB database \chatroom-john\ will be automatically created on first connection.
+
+**MongoDB Installation:** If you don't have MongoDB installed, download it from the [official MongoDB website](https://www.mongodb.com/try/download/community). Make sure the MongoDB service is running before starting the backend.
 
 ### Frontend Setup
 
@@ -160,11 +181,10 @@ chatroom-activity-8/
        chat/          # WebSocket gateway
        rooms/         # Room management
        messages/      # Message handling
-       entities/      # Database models
+       schemas/       # Mongoose schemas
        main.ts        # Application entry
     .env.example       # Environment variables template
     package.json
-    chatroom-john.sqlite  # Database (auto-created)
 
  frontend/
      src/
@@ -181,7 +201,7 @@ chatroom-activity-8/
 The backend uses these environment variables (defined in \.env\ or uses defaults):
 
 - \PORT\ - Server port (default: 3000)
-- \DATABASE_PATH\ - SQLite database file path (default: ./chatroom-john.sqlite)
+- \MONGODB_URI\ - MongoDB connection string (default: mongodb://localhost:27017/chatroom-john)
 
 ### Frontend API Configuration
 
@@ -197,7 +217,7 @@ To change the backend URL, modify:
 The app uses Socket.IO for bidirectional, event-based communication between clients and server, enabling instant message delivery.
 
 ### Persistent Storage
-Messages and rooms are stored in a SQLite database (\chatroom-john.sqlite\) using TypeORM, ensuring data persists across server restarts.
+Messages and rooms are stored in a MongoDB database (\chatroom-john\) using Mongoose, ensuring data persists across server restarts.
 
 ### User Experience
 - **Consistent avatars** - Each user gets a unique emoji based on their username

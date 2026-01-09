@@ -1,23 +1,20 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RoomsModule } from './rooms/rooms.module';
 import { MessagesModule } from './messages/messages.module';
 import { ChatModule } from './chat/chat.module';
-import { Room } from './entities/room.entity';
-import { Message } from './entities/message.entity';
-import { User } from './entities/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: process.env.DATABASE_PATH || './chatroom-john.sqlite',
-      entities: [Room, Message, User],
-      synchronize: true, // Auto-create tables (disable in production)
-      logging: false,
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
+    MongooseModule.forRoot(
+      process.env.MONGODB_URI || 'mongodb://localhost:27017/chatroom-john',
+    ),
     RoomsModule,
     MessagesModule,
     ChatModule,

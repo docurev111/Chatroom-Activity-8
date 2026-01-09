@@ -1,61 +1,61 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Message } from '../entities/message.entity';
-import { User } from '../entities/user.entity';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, Types } from 'mongoose';
+import { Message } from '../schemas/message.schema';
+import { User } from '../schemas/user.schema';
 import { CreateMessageDto } from './dto/create-message.dto';
 
 @Injectable()
 export class MessagesService {
   constructor(
-    @InjectRepository(Message)
-    private messageRepository: Repository<Message>,
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    @InjectModel(Message.name)
+    private messageModel: Model<Message>,
+    @InjectModel(User.name)
+    private userModel: Model<User>,
   ) {}
 
   async create(createMessageDto: CreateMessageDto): Promise<Message> {
     // Find or create user
-    let user = await this.userRepository.findOne({
-      where: { username: createMessageDto.username },
+    let user = await this.userModel.findOne({
+      username: createMessageDto.username,
     });
 
     if (!user) {
-      user = this.userRepository.create({ username: createMessageDto.username });
-      user = await this.userRepository.save(user);
+      user = new this.userModel({ username: createMessageDto.username });
+      user = await user.save();
     }
 
-    const message = this.messageRepository.create({
+    const message = new this.messageModel({
       content: createMessageDto.content,
-      roomId: createMessageDto.roomId,
-      userId: user.id,
+      roomId: new Types.ObjectId(createMessageDto.roomId),
+      userId: user._id,
+      username: createMessageDto.username,
     });
 
-    return await this.messageRepository.save(message);
+    return await message.save();
   }
 
-  async findByRoom(roomId: number): Promise<any[]> {
-    const messages = await this.messageRepository.find({
-      where: { roomId },
-      relations: ['user'],
-      order: { createdAt: 'ASC' },
-    });
+  async findByRoom(roomId: string): Promise<any[]> {
+    const messages = await this.messageModel
+      .find({ roomId: new Types.ObjectId(roomId) })
+      .sort({ createdAt: 1 })
+      .exec();
 
-    // Map messages to include username
+    // Map messages to include all needed fields
     return messages.map(message => ({
-      id: message.id,
+      id: message._id.toString(),
       content: message.content,
-      roomId: message.roomId,
-      userId: message.userId,
-      username: message.user.username,
-      createdAt: message.createdAt,
+      roomId: message.roomId.toString(),
+      userId: message.userId.toString(),
+      username: message.username,
+      createdAt: (message as any).createdAt,
     }));
   }
 
   async findAll(): Promise<Message[]> {
-    return await this.messageRepository.find({
-      relations: ['user', 'room'],
-      order: { createdAt: 'DESC' },
-    });
+    return await this.messageModel
+      .find()
+      .sort({ createdAt: -1 })
+      .exec();
   }
 }

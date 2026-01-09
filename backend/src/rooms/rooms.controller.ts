@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Delete, Body, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { RoomsService } from './rooms.service';
 import { CreateRoomDto } from './dto/create-room.dto';
-import { Room } from '../entities/room.entity';
+import { Room } from '../schemas/room.schema';
 
 @ApiTags('rooms')
 @Controller('rooms')
@@ -11,7 +11,7 @@ export class RoomsController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new room' })
-  @ApiResponse({ status: 201, description: 'Room created successfully', type: Room })
+  @ApiResponse({ status: 201, description: 'Room created successfully' })
   @ApiResponse({ status: 409, description: 'Room already exists' })
   create(@Body() createRoomDto: CreateRoomDto): Promise<Room> {
     return this.roomsService.create(createRoomDto);
@@ -19,16 +19,16 @@ export class RoomsController {
 
   @Get()
   @ApiOperation({ summary: 'Get all rooms' })
-  @ApiResponse({ status: 200, description: 'Return all rooms', type: [Room] })
+  @ApiResponse({ status: 200, description: 'Return all rooms' })
   findAll(): Promise<Room[]> {
     return this.roomsService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a room by id' })
-  @ApiResponse({ status: 200, description: 'Return the room', type: Room })
+  @ApiResponse({ status: 200, description: 'Return the room' })
   @ApiResponse({ status: 404, description: 'Room not found' })
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<Room> {
+  findOne(@Param('id') id: string): Promise<Room> {
     return this.roomsService.findOne(id);
   }
 
@@ -36,7 +36,7 @@ export class RoomsController {
   @ApiOperation({ summary: 'Delete a room' })
   @ApiResponse({ status: 200, description: 'Room deleted successfully' })
   @ApiResponse({ status: 404, description: 'Room not found' })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  remove(@Param('id') id: string): Promise<void> {
     return this.roomsService.remove(id);
   }
 }

@@ -33,7 +33,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('joinRoom')
   handleJoinRoom(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: { roomId: number; username: string },
+    @MessageBody() data: { roomId: string; username: string },
   ) {
     client.join(`room-${data.roomId}`);
     this.server.to(`room-${data.roomId}`).emit('userJoined', {
@@ -46,7 +46,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: { roomId: number; username: string },
+    @MessageBody() data: { roomId: string; username: string },
   ) {
     client.leave(`room-${data.roomId}`);
     this.server.to(`room-${data.roomId}`).emit('userLeft', {
@@ -66,12 +66,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       
       // Emit to all clients in the room
       this.server.to(`room-${createMessageDto.roomId}`).emit('newMessage', {
-        id: message.id,
+        id: (message as any)._id.toString(),
         content: message.content,
-        username: createMessageDto.username,
-        roomId: message.roomId,
-        userId: message.userId,
-        createdAt: message.createdAt,
+        username: message.username,
+        roomId: (message as any).roomId.toString(),
+        userId: (message as any).userId.toString(),
+        createdAt: (message as any).createdAt,
       });
 
       return { success: true, message };
@@ -83,7 +83,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('typing')
   handleTyping(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: { roomId: number; username: string; isTyping: boolean },
+    @MessageBody() data: { roomId: string; username: string; isTyping: boolean },
   ) {
     client.to(`room-${data.roomId}`).emit('userTyping', {
       username: data.username,

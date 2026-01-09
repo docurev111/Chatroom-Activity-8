@@ -1,45 +1,45 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Room } from '../entities/room.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Room } from '../schemas/room.schema';
 import { CreateRoomDto } from './dto/create-room.dto';
 
 @Injectable()
 export class RoomsService {
   constructor(
-    @InjectRepository(Room)
-    private roomRepository: Repository<Room>,
+    @InjectModel(Room.name)
+    private roomModel: Model<Room>,
   ) {}
 
   async create(createRoomDto: CreateRoomDto): Promise<Room> {
-    const existingRoom = await this.roomRepository.findOne({
-      where: { name: createRoomDto.name },
+    const existingRoom = await this.roomModel.findOne({
+      name: createRoomDto.name,
     });
 
     if (existingRoom) {
       throw new ConflictException('Room with this name already exists');
     }
 
-    const room = this.roomRepository.create(createRoomDto);
-    return await this.roomRepository.save(room);
+    const room = new this.roomModel(createRoomDto);
+    return await room.save();
   }
 
   async findAll(): Promise<Room[]> {
-    return await this.roomRepository.find({
-      order: { createdAt: 'DESC' },
-    });
+    return await this.roomModel.find().sort({ createdAt: -1 }).exec();
   }
 
-  async findOne(id: number): Promise<Room> {
-    const room = await this.roomRepository.findOne({ where: { id } });
+  async findOne(id: string): Promise<Room> {
+    const room = await this.roomModel.findById(id).exec();
     if (!room) {
       throw new NotFoundException(`Room with ID ${id} not found`);
     }
     return room;
   }
 
-  async remove(id: number): Promise<void> {
-    const room = await this.findOne(id);
-    await this.roomRepository.remove(room);
+  async remove(id: string): Promise<void> {
+    const result = await this.roomModel.findByIdAndDelete(id).exec();
+    if (!result) {
+      throw new NotFoundException(`Room with ID ${id} not found`);
+    }
   }
 }

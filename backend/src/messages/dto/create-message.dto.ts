@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateMessageDto {
@@ -7,13 +7,10 @@ export class CreateMessageDto {
   @IsNotEmpty()
   content: string;
 
-  @ApiProperty({ description: 'The room ID' })
-  @IsNumber()
-  roomId: number;
-
-  @ApiProperty({ description: 'The user ID' })
-  @IsNumber()
-  userId: number;
+  @ApiProperty({ description: 'The room ID (MongoDB ObjectId)' })
+  @IsString()
+  @IsNotEmpty()
+  roomId: string;
 
   @ApiProperty({ description: 'The username' })
   @IsString()
