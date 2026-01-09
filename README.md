@@ -1,260 +1,172 @@
 ﻿# Chatroom Application
 
-A modern, real-time chat application built with React and NestJS, featuring a clean WhatsApp-inspired design with animated 3D backgrounds.
+A real-time chat application built with React and NestJS, featuring WebSocket communication, MongoDB persistence, and a WhatsApp-inspired interface with animated 3D backgrounds.
 
-##  Features
+## Overview
 
-- **Real-time Messaging** - Insta### Backend won't start
-- Make sure port 3000 is not in use by another application
-- **Verify MongoDB is running**: Run \mongosh\ to test connection
-- Check that all dependencies are installed: \
-pm install\
-- Verify Node.js version is 16 or higher: \
-ode --version\
+This chatroom application enables users to create and join multiple chat rooms for real-time messaging. Built with modern web technologies, it provides instant message delivery through WebSocket connections, persistent message storage in MongoDB, and a clean, responsive user interface.
 
-### Frontend won't connect
-- Ensure the backend is running first
-- Check that backend is accessible at \http://localhost:3000\
-- Clear browser cache and refresh
+## Technology Stack
 
-### MongoDB Connection Issues
-- **Windows**: Check MongoDB service is running in Services
-- **macOS/Linux**: Run \brew services list\ or \sudo systemctl status mongod\
-- Test connection manually: \mongosh mongodb://localhost:27017\
-- Make sure MongoDB is installed and port 27017 is not blocked
-- For a fresh start, you can drop the database: \mongosh\ then \use chatroom-john\ then \db.dropDatabase()\very using Socket.IO
-- **Multiple Chat Rooms** - Create and join different conversation spaces
-- **User Authentication** - Username-based login with persistent sessions
-- **Typing Indicators** - See when others are typing
-- **Profile Avatars** - Unique emoji avatars for each user
-- **Animated Background** - Interactive 3D ring effects using Vanta.js
-- **Responsive Design** - Clean, modern UI inspired by popular messaging apps
-- **Message History** - Persistent message storage with MongoDB
-- **REST API Documentation** - Auto-generated Swagger docs
+**Frontend:**
+- React 19 with Vite
+- Socket.IO Client for real-time communication
+- Axios for REST API requests
+- Vanta.js and Three.js for 3D animated backgrounds
 
-##  Tech Stack
+**Backend:**
+- NestJS framework with TypeScript
+- Socket.IO for WebSocket server
+- Mongoose ODM with MongoDB
+- Swagger for API documentation
 
-### Frontend
-- **React 19** - Modern UI library with hooks
-- **Vite** - Fast build tool and dev server
-- **Socket.IO Client** - Real-time bidirectional communication
-- **Axios** - HTTP client for REST API calls
-- **Vanta.js + Three.js** - 3D animated backgrounds
-- **Inter Font** - Clean, modern typography
+## Prerequisites
 
-### Backend
-- **NestJS** - Progressive Node.js framework
-- **TypeScript** - Type-safe development
-- **Socket.IO** - WebSocket server for real-time features
-- **Mongoose** - MongoDB ODM (Object Data Modeling)
-- **MongoDB** - NoSQL document database
-- **Swagger** - Automatic API documentation
+Before running this application, ensure you have the following installed:
 
-##  Installation
-
-### Prerequisites
-- Node.js (v16 or higher)
+- Node.js (version 16 or higher)
 - npm or yarn
-- **MongoDB** (v4.4 or higher) - Must be installed and running locally
+- MongoDB (version 4.4 or higher)
 
-### Clone the Repository
+## Installation and Setup
 
-\\\ash
+### 1. Clone the Repository
+
+`ash
 git clone https://github.com/docurev111/Chatroom-Activity-8.git
 cd Chatroom-Activity-8
-\\\
+`
 
-### Backend Setup
+### 2. Install MongoDB
 
-1. Navigate to backend directory:
-\\\ash
+If MongoDB is not already installed on your system:
+
+- **Windows:** Download from [MongoDB Community Server](https://www.mongodb.com/try/download/community)
+- **macOS:** `brew install mongodb-community`
+- **Linux:** Follow the [official MongoDB installation guide](https://docs.mongodb.com/manual/installation/)
+
+Start the MongoDB service:
+- **Windows:** MongoDB typically starts automatically as a service
+- **macOS:** `brew services start mongodb-community`
+- **Linux:** `sudo systemctl start mongod`
+
+Verify MongoDB is running by executing `mongosh` in your terminal.
+
+### 3. Backend Setup
+
+`ash
 cd backend
-\\\
-
-2. Install dependencies:
-\\\ash
 npm install
-\\\
+`
 
-3. Create environment file (optional - uses defaults if not created):
-\\\ash
-# Copy the example file
-copy .env.example .env
+Create a `.env` file (optional, defaults will be used if not created):
 
-# Or create manually with these settings:
-# PORT=3000
-# MONGODB_URI=mongodb://localhost:27017/chatroom-john
-\\\
+`
+PORT=3000
+MONGODB_URI=mongodb://localhost:27017/chatroom-john
+`
 
-4. Start the development server:
-\\\ash
+Start the backend server:
+
+`ash
 npm run start:dev
-\\\
+`
 
-The backend will start on \http://localhost:3000\
+The backend will run on `http://localhost:3000`. API documentation is available at `http://localhost:3000/api/docs`.
 
-**Note:** The MongoDB database \chatroom-john\ will be automatically created on first connection.
+### 4. Frontend Setup
 
-**MongoDB Installation:** If you don't have MongoDB installed, download it from the [official MongoDB website](https://www.mongodb.com/try/download/community). Make sure the MongoDB service is running before starting the backend.
+Open a new terminal window:
 
-### Frontend Setup
-
-1. Open a new terminal and navigate to frontend directory:
-\\\ash
+`ash
 cd frontend
-\\\
-
-2. Install dependencies:
-\\\ash
 npm install
-\\\
-
-3. Start the development server:
-\\\ash
 npm run dev
-\\\
+`
 
-The frontend will start on \http://localhost:5173\
+The frontend will run on `http://localhost:5173`.
 
-##  Design Features
+## Running the Application
 
-### Color Palette
-- **Primary Green**: \#25d366\ - WhatsApp-inspired green
-- **Dark Green**: \#128c7e\ - Accent color
-- **Header**: \#075e54\ - WhatsApp signature dark green
-- **Chat Background**: \#e5ddd5\ - Warm beige tone
-- **Message Bubbles**: 
-  - Own messages: \#d9fdd3\ (light green)
-  - Other messages: \#ffffff\ (white)
-- **Dark Sidebar**: \#111b21\ - Room list background
+1. Ensure MongoDB is running on your system
+2. Start the backend server: `cd backend && npm run start:dev`
+3. Start the frontend server: `cd frontend && npm run dev`
+4. Open your browser and navigate to `http://localhost:5173`
+5. Enter a username to begin chatting
+6. Create a new room or join an existing one to start messaging
 
-### UI Components
-- **Clean Header** - Minimalist design with logo and user info
-- **Dark Sidebar** - Room list with green accents
-- **WhatsApp-style Messages** - Bubble chat with profile pictures
-- **Smooth Animations** - Fade-in effects and transitions
-- **Glass-morphism Effects** - Modern blur and transparency
+## Features
 
-##  API Documentation
+- Real-time messaging with WebSocket connections
+- Multiple chat room support
+- Persistent message history stored in MongoDB
+- Typing indicators to show when users are composing messages
+- Unique emoji avatars generated from usernames
+- Responsive WhatsApp-inspired design
+- Interactive 3D animated background effects
+- REST API with Swagger documentation
 
-Once the backend is running, access the interactive API documentation at:
+## Project Structure
 
-\\\
-http://localhost:3000/api/docs
-\\\
-
-### Available Endpoints
-
-#### Rooms
-- \POST /rooms\ - Create a new chat room
-- \GET /rooms\ - Get all rooms
-- \GET /rooms/:id\ - Get specific room
-- \DELETE /rooms/:id\ - Delete a room
-
-#### Messages
-- \POST /messages\ - Create a message
-- \GET /messages\ - Get all messages
-- \GET /messages/room/:roomId\ - Get messages by room
-
-#### WebSocket Events
-- \joinRoom\ - Join a chat room
-- \leaveRoom\ - Leave a room
-- \sendMessage\ - Send a message
-- \	yping\ - Typing indicator
-
-##  Usage
-
-1. **Start the application** - Run both backend and frontend (see installation steps above)
-2. **Access the app** - Open \http://localhost:5173\ in your browser
-3. **Enter your username** - Choose any username to login
-4. **Create or join a room** - Click "New Room" or select an existing room
-5. **Start chatting** - Send messages in real-time
-6. **See typing indicators** - Know when others are typing
-7. **View message history** - All messages are saved automatically
-
-##  Project Structure
-
-\\\
+`
 chatroom-activity-8/
  backend/
     src/
-       chat/          # WebSocket gateway
-       rooms/         # Room management
-       messages/      # Message handling
-       schemas/       # Mongoose schemas
-       main.ts        # Application entry
-    .env.example       # Environment variables template
+       chat/          # WebSocket gateway for real-time events
+       rooms/         # Room management endpoints
+       messages/      # Message handling endpoints
+       schemas/       # Mongoose database schemas
+       main.ts        # Application entry point
+    .env.example
     package.json
-
  frontend/
-     src/
-        components/    # React components
-        services/      # API & Socket services
-        App.jsx        # Main component
-     package.json
-\\\
+    src/
+       components/    # React UI components
+       services/      # API and Socket.IO services
+       App.jsx        # Main application component
+    package.json
+ README.md
+`
 
-##  Configuration
+## API Endpoints
 
-### Backend Environment Variables
+**Rooms:**
+- `POST /rooms` - Create a new chat room
+- `GET /rooms` - Retrieve all rooms
+- `GET /rooms/:id` - Get a specific room
+- `DELETE /rooms/:id` - Delete a room
 
-The backend uses these environment variables (defined in \.env\ or uses defaults):
+**Messages:**
+- `POST /messages` - Create a new message
+- `GET /messages` - Retrieve all messages
+- `GET /messages/room/:roomId` - Get messages for a specific room
 
-- \PORT\ - Server port (default: 3000)
-- \MONGODB_URI\ - MongoDB connection string (default: mongodb://localhost:27017/chatroom-john)
+**WebSocket Events:**
+- `joinRoom` - Join a chat room
+- `leaveRoom` - Leave a room
+- `sendMessage` - Send a message to a room
+- `typing` - Broadcast typing indicator
 
-### Frontend API Configuration
+## Troubleshooting
 
-The frontend is configured to connect to \http://localhost:3000\ by default. 
+**Backend fails to start:**
+- Verify port 3000 is not already in use
+- Ensure MongoDB is running: test with `mongosh`
+- Check that all dependencies are installed: `npm install`
 
-To change the backend URL, modify:
-- \rontend/src/services/api.js\ - Change \API_URL\
-- \rontend/src/services/socket.js\ - Change \SOCKET_URL\
+**Frontend cannot connect:**
+- Confirm the backend is running on `http://localhost:3000`
+- Clear browser cache and reload the page
 
-##  Key Features Explained
+**MongoDB connection issues:**
+- Verify MongoDB service is running
+- Test connection: `mongosh mongodb://localhost:27017`
+- Check that port 27017 is not blocked by firewall
 
-### Real-time Communication
-The app uses Socket.IO for bidirectional, event-based communication between clients and server, enabling instant message delivery.
-
-### Persistent Storage
-Messages and rooms are stored in a MongoDB database (\chatroom-john\) using Mongoose, ensuring data persists across server restarts.
-
-### User Experience
-- **Consistent avatars** - Each user gets a unique emoji based on their username
-- **Message alignment** - Your messages on the right, others on the left
-- **Clean design** - No clutter, focus on conversation
-- **Smooth animations** - Professional feel with subtle transitions
-
-##  Troubleshooting
-
-### Backend won't start
-- Make sure port 3000 is not in use by another application
-- Check that all dependencies are installed: \
-pm install\
-- Verify Node.js version is 16 or higher: \
-ode --version\
-
-### Frontend won't connect
-- Ensure the backend is running first
-- Check that backend is accessible at \http://localhost:3000\
-- Clear browser cache and refresh
-
-### Database issues
-- The database file will be created automatically on first run
-- If you need a fresh start, delete \ackend/chatroom-john.sqlite\ and restart the backend
-
-##  License
+## License
 
 This project is open source and available for educational purposes.
 
-##  Contributing
-
-Feel free to fork this project and submit pull requests for any improvements.
-
-##  Contact
-
-For questions or feedback, please open an issue on GitHub.
-
 ---
 
-**Built with  using React and NestJS**
+Built with React and NestJS
